@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # --- 1. The Traefik Reverse Proxy/Load Balancer Service ---
   traefik:
@@ -48,13 +46,12 @@ services:
       - "traefik.enable=true"
       
       # --- Hostname Routing Rule ---
-      - "traefik.http.routers.ollama-rtr.rule=Host(`ollama.localhost`)"
+      - "traefik.http.routers.ollama-rtr.rule=Host(`ollama.localhost`) || Host(`localhost`)"
       - "traefik.http.routers.ollama-rtr.entrypoints=web"
       
-      # --- Load Balancer Algorithm: LEAST CONNECTION ---
+      # --- Load Balancer Configuration ---
       - "traefik.http.routers.ollama-rtr.service=ollama-service"
       - "traefik.http.services.ollama-service.loadbalancer.server.port=11434"
-      - "traefik.http.services.ollama-service.loadbalancer.algorithm=leastconn" 
       
       # --- Health Check ---
       - "traefik.http.services.ollama-service.loadbalancer.healthcheck.path=/api/tags"
